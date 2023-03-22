@@ -101,7 +101,7 @@ jobs:
           cd ./lede
 
           #默认主机名
-          sed -i 's/OpenWrt/OpenWRT-R4S/g' ./package/base-files/files/bin/config_generate
+          sed -i 's/OpenWrt/OpenWRT-o0o/g' ./package/base-files/files/bin/config_generate
           #默认IP地址
           sed -i 's/192.168.1.1/192.168.33.200/g' ./package/base-files/files/bin/config_generate
           #默认主题
@@ -175,12 +175,12 @@ jobs:
           cp -rf ./.config ./bin/targets/config.txt
 
           cd ./bin/targets
-          zip -pmq R4S_Firmware_$BUILD_DATE.zip *.*
+          zip -pmq o0o_Firmware_$BUILD_DATE.zip *.*
 
       - name: Release Firmware
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: R4S_Firmware_${{env.BUILD_DATE}}
+          tag_name: o0o_Firmware_${{env.BUILD_DATE}}
           files: ./lede/bin/targets/*.zip
 
       - name: Delete Old Releases
