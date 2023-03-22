@@ -28,7 +28,7 @@ permissions: write-all
 
 jobs:
   build_openwrt:
-    name: OpenWRT o0o
+    name: Build X86 Firmware
     runs-on: ubuntu-latest
     steps:
       - name: Initialization Environment
@@ -58,15 +58,6 @@ jobs:
         run: |
           cd ./lede/package
 
-          #PassWall
-          git clone --depth=1 --single-branch https://github.com/xiaorouji/openwrt-passwall.git
-
-          #Design Theme
-          git clone --depth=1 --single-branch https://github.com/gngpp/luci-theme-design.git
-
-          #Design Config
-          git clone --depth=1 --single-branch https://github.com/gngpp/luci-app-design-config.git
-
           #OpenClash
           git clone --depth=1 --single-branch --branch 'dev' https://github.com/vernesong/OpenClash.git
 
@@ -93,6 +84,9 @@ jobs:
         run: |
           cd ./lede
 
+          #第三方插件源
+          echo 'src-git small8 https://github.com/kenzok8/small-package' >> ./feeds.conf.default
+
           ./scripts/feeds update -a
           ./scripts/feeds install -a
 
@@ -101,7 +95,7 @@ jobs:
           cd ./lede
 
           #默认主机名
-          sed -i 's/OpenWrt/OpenWRT-o0o/g' ./package/base-files/files/bin/config_generate
+          sed -i 's/OpenWrt/OpenWRT o0o/g' ./package/base-files/files/bin/config_generate
           #默认IP地址
           sed -i 's/192.168.1.1/192.168.33.200/g' ./package/base-files/files/bin/config_generate
           #默认主题
@@ -175,12 +169,12 @@ jobs:
           cp -rf ./.config ./bin/targets/config.txt
 
           cd ./bin/targets
-          zip -pmq o0o_Firmware_$BUILD_DATE.zip *.*
+          zip -pmq X86_Firmware_$BUILD_DATE.zip *.*
 
       - name: Release Firmware
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: o0o_Firmware_${{env.BUILD_DATE}}
+          tag_name: X86_Firmware_${{env.BUILD_DATE}}
           files: ./lede/bin/targets/*.zip
 
       - name: Delete Old Releases
